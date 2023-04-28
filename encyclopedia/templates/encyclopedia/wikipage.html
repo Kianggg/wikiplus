@@ -1,0 +1,16 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{ pagename }}
+{% endblock %}
+
+{% block body %}
+
+{{ entry|safe }}
+
+<form action="{% url 'wiki:editpage' %}" method="get">
+    <input type="hidden" name="entry" value="{{pagename}}">
+    <input type="submit" value="Edit">
+</form>
+
+{% endblock %}
