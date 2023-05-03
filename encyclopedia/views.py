@@ -12,7 +12,7 @@ from . import util
 
 # Form for creating a new wiki page
 class NewPageForm(forms.Form):
-    page = forms.CharField(label="Page Title")
+    pagename = forms.CharField(label="Page Title")
     content = forms.CharField(widget=forms.Textarea())
 
 def index(request):
@@ -20,13 +20,16 @@ def index(request):
         query = request.POST.get("q")
         entries = util.list_entries()
         matches = []
+        queryLower = query.lower()
+
         for entry in entries:
-            if query.lower() == entry.lower():
+            if queryLower == entry.lower():
                 return render(request, "encyclopedia/wikipage.html", {
                     "entry": markdown2.markdown(util.get_entry(entry))
                 })
-            elif query.lower() in entry.lower():
+            elif queryLower in entry.lower():
                 matches.append(entry)
+
         if len(matches) > 0:
             return render(request, "encyclopedia/index.html", {
                 "entries": matches,
@@ -46,22 +49,20 @@ def index(request):
 def addpage(request):
     if request.method == "POST":
         form = NewPageForm(request.POST)
-        if form.is_valid():
-            entries = util.list_entries()
-            pagename = request.POST.get("page")
-            for entry in entries:
-                if pagename.lower() == entry.lower():
-                    return render(request, "encyclopedia/addpage.html", {
-                        "form": form
-                })
-            # Page with that title does not currently exist, safe to create new file
-            util.save_entry(pagename, request.POST.get("content"))
-            # Successfully created page, redirect to homepage
-            return HttpResponseRedirect(reverse("wiki:index"))
-        else:
+        title = form.data["pagename"]
+        entry = form.data["content"]
+
+        # Chec to see if a page with that title already exists
+        if util.get_entry(title):
             return render(request, "encyclopedia/addpage.html", {
-            "form": form
-        })
+                        "form": form
+            })
+        
+        # Page with that title does not currently exist, safe to create new file
+        util.save_entry(title, entry)
+
+        # Successfully created page, load the newly-created page
+        return HttpResponseRedirect(reverse("wiki:wikipage", args=(title,)))
     else:
         return render(request, "encyclopedia/addpage.html", {
             "form": NewPageForm()
@@ -71,12 +72,14 @@ def editpage(request):
     if request.method == "GET":
         pagename = request.GET.get("entry")
         previouspage = util.get_entry(pagename)
+
         return render(request, "encyclopedia/editpage.html", {
             "entry": pagename,
             "editable": previouspage
         })
     else:
         form = NewPageForm(request.POST)
+
         if form.is_valid:
             pagename = request.POST.get("entry")
             util.save_entry(pagename, request.POST.get("content"))
@@ -86,11 +89,10 @@ def editpage(request):
                 "entry": pagename,
                 "editable": form
         })
-        
-            
 
 def wikipage(request, pagename):
     entry = util.get_entry(pagename)
+
     if entry == None:
         return render(request, "encyclopedia/wikipage.html", {
             "pagename": pagename,
@@ -105,6 +107,7 @@ def wikipage(request, pagename):
 def randompage(request):
     pages = util.list_entries()
     luckynum = random.randint(0, len(pages) - 1)
+
     return render(request, "encyclopedia/wikipage.html", {
         "pagename": pages[luckynum],
         "entry": markdown2.markdown(util.get_entry(pages[luckynum]))

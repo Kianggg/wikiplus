@@ -8,5 +8,5 @@ urlpatterns = [
     path("add", views.addpage, name="addpage"),
     path("edit", views.editpage, name="editpage"),
     path("random", views.randompage, name="randompage"),
-    path("<str:pagename>", views.wikipage, name="page")
+    path("<str:pagename>", views.wikipage, name="wikipage")
 ]
