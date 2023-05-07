@@ -1,12 +1,30 @@
 {% extends "encyclopedia/layout.html" %}
 
+{% load static %}
+
 {% block title %}
     {{ pagename }}
 {% endblock %}
 
 {% block body %}
 
-{{ entry|safe }}
+<div id="page-header">
+    <div id="page-title">{{ pagename }}</div>
+    <ul id="tabs">
+        <li><button id="content-tab">Main Article</button></li>
+        <li><button id="gallery-tab">Mood Board</button></li>
+    </ul>
+</div>
+
+<div id="content-view">
+    {{ entry|safe }}
+</div>
+
+<div id="gallery-view" style="display: none;">
+    {% for image in gallery %}
+    <img id="gallery-image" src="{{ image }}"></a>
+    {% endfor %}
+</div>
 
 <form action="{% url 'wiki:editpage' %}" method="get">
     <input type="hidden" name="entry" value="{{pagename}}">
@@ -14,3 +32,5 @@
 </form>
 
 {% endblock %}
+
+<script src="{% static 'encyclopedia/tabs.js' %}"></script>

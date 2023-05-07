@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ title }}</h1>
+    <h1>Welcome to WikiPlus!</h1> <br/>
+
+    <h3>Pages Created: {{ numberOfEntries }}</h3>
+    <h3>Edits Made: {{ numberOfEdits }}</h3><br/>
+
+    <h2>{{ title }}</h2>
 
     <ul>
         {% for entry in entries %}

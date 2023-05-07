@@ -10,7 +10,8 @@
 
 <form action="{% url 'wiki:editpage' %}" method="post">
     {% csrf_token %}
-    <textarea name="content" cols="40" rows="10" required="" id="id_content">{{ editable }}</textarea>
+    <textarea name="content" cols="20" rows="6" required="" id="id_content">{{ editable }}</textarea>
+    <textarea name="images" cols="20" rows="3" required="" id="id_images">{{ editable_image_links }}</textarea>
     <input type="hidden" name="entry" value="{{entry}}">
     <input type="submit" value="Submit">
 </form>

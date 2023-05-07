@@ -1,0 +1,21 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Replace
+{% endblock %}
+
+{% block body %}
+
+<h1>Replace</h1>
+<h2>{{ error }}</h2>
+<h3>Replaces each instance of a word with that of another word. This will search and edit across ALL pages.</h3>
+<form action="{% url 'wiki:replace' %}" method="post" onsubmit="return confirm('Are you sure you want to submit?');">
+    {% csrf_token %}
+    <label for="old">Old word:</label><br>
+    <input type="text" id="old" name="toBeReplaced" minlength=3 required><br>
+    <label for="new">New word:</label><br>
+    <input type="text" id="new" name="toReplaceWith" minlength=3 required><br><br>
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}
