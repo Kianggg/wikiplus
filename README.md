@@ -21,6 +21,8 @@ It also prevents the common inconvenience of downloading an image from online on
 
 There is a "Find & Replace" function that will replace every instance of a given word with another given word across ALL pages. This is for naming and re-naming characters and places (a common occurence when outlining/world-building).
 
+I opted not to do category/folder organization after all, as I stumbled in concepting it. How should I decide what the categories are? Adding tags to an entry would be easy enough, but how to decide how the entries are listed on the front page? A separate view for creating entries and htne radio buttons to categorize the entries seemed a little clunky... I couldn't come up with a clean way to do this, so I did not implement this and instead opted to move on to other features.
+
 Some CSS was also implemented to make the site visually appealing to me. I just really like the Gaegu font.
 
 ## Changes
